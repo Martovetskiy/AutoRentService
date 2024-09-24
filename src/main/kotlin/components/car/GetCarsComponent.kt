@@ -13,27 +13,62 @@ class GetCarsComponent (
     
     private var _data: MutableState<List<CarResponse>> = mutableStateOf(
         mutableListOf()
-    );
-    private val _showPopup: MutableState<Boolean> = mutableStateOf(false);
+    )
+    private val _showFilter: MutableState<Boolean> = mutableStateOf(false)
+
+    private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
+    
+    private val _make: MutableState<String?> = mutableStateOf(null)
+    private val _model: MutableState<String?> = mutableStateOf(null)
+    private val _year: MutableState<String?> = mutableStateOf(null)
+    private val _colorHex: MutableState<String?> = mutableStateOf(null)
+    private val _pricePerDay: MutableState<String?> = mutableStateOf(null)
+    private val _numberPlate: MutableState<String?> = mutableStateOf(null)
+    private val _status: MutableState<String?> = mutableStateOf(null)
+    private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
+    private val _sortBy: MutableState<String> = mutableStateOf("car_id")
+    private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
+
+    val make = _make
+    val model = _model
+    val year = _year
+    val colorHex = _colorHex
+    val pricePerDay = _pricePerDay
+    val numberPlate = _numberPlate
+    val sortDirection = _sortDirection
+    val sortBy = _sortBy
+    val isLoad = _isLoad
+    val status = _status
+    val showFilter = _showFilter
 
     val showPopup = _showPopup
     val textPopup = _textPopup
 
-    var ascending = mutableStateOf(true)
     val sortedCars = _data
-    var selectedAttribute = mutableStateOf("car_id") 
 
     init {
-        request2Data()
+        request2Get()
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun request2Data(){
+    fun request2Get(){
         GlobalScope.launch {
+            _showFilter.value = false
+            _isLoad.value = false
             try {
-                _data.value = getCars()
-                sort()
+                _data.value = getCars(
+                    make = _make.value,
+                    model = _model.value,
+                    year = _year.value,
+                    color_hex = _colorHex.value,
+                    price_per_day = _pricePerDay.value,
+                    number_plate = _numberPlate.value,
+                    status = _status.value,
+                    sortBy = _sortBy.value,
+                    sortDirection = _sortDirection.value
+                )
+                _isLoad.value = true
             }
             catch (e: Exception){
                 _textPopup.value = e.message.toString()
@@ -42,17 +77,4 @@ class GetCarsComponent (
         }
     }
 
-    fun sort(){
-        sortedCars.value = when (selectedAttribute.value) {
-            "car_id" -> if (ascending.value) _data.value.sortedBy { it.car_id } else _data.value.sortedByDescending { it.car_id }
-            "make" -> if (ascending.value) _data.value.sortedBy { it.make } else _data.value.sortedByDescending { it.make }
-            "model" -> if (ascending.value) _data.value.sortedBy { it.model } else _data.value.sortedByDescending { it.model }
-            "year" -> if (ascending.value) _data.value.sortedBy { it.year } else _data.value.sortedByDescending { it.year }
-            "color_hex" -> if (ascending.value) _data.value.sortedBy { it.color_hex } else _data.value.sortedByDescending { it.color_hex }
-            "price_per_day" -> if (ascending.value) _data.value.sortedBy { it.price_per_day } else _data.value.sortedByDescending { it.price_per_day }
-            "status" -> if (ascending.value) _data.value.sortedBy { it.status } else _data.value.sortedByDescending { it.status }
-            "create_at" -> if (ascending.value) _data.value.sortedBy { it.create_at } else _data.value.sortedByDescending { it.create_at }
-            else -> _data.value
-        }
-    }
 }

@@ -11,9 +11,9 @@ import kotlinx.coroutines.*
 class GetCarComponent (
     componentContext: ComponentContext,
 ): ComponentContext by componentContext {
-    private val _car: MutableState<CarResponse?> = mutableStateOf(null);
-    private val _carBuf: MutableState<CarResponse?> = mutableStateOf(null);
-    private val _showPopup: MutableState<Boolean> = mutableStateOf(false);
+    private val _car: MutableState<CarResponse?> = mutableStateOf(null)
+    private val _carBuf: MutableState<CarResponse?> = mutableStateOf(null)
+    private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
     private val _id: MutableState<Long?> = mutableStateOf(null)
 
@@ -76,6 +76,7 @@ class GetCarComponent (
                 _textPopup.value = "Автомобиль успешно удален"
                 _isDelete.value = true
                 _isEdit.value = false
+                _car.value = null
             }
             catch (e: Exception) {
                 _car.value = null

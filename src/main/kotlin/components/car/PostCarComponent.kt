@@ -13,7 +13,7 @@ class PostCarComponent  (
     componentContext: ComponentContext,
 ): ComponentContext by componentContext {
     private val _car: MutableState<CarRequest?> = mutableStateOf(null)
-    private val _showPopup: MutableState<Boolean> = mutableStateOf(false);
+    private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
 
 

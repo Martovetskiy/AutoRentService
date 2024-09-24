@@ -4,34 +4,48 @@ import api.HOST
 import api.client
 import api.cutomers.FailResponse
 import api.cutomers.NotFoundResponse
-import io.ktor.client.call.body
-import io.ktor.client.request.request
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.URLProtocol
-import io.ktor.http.contentType
-import io.ktor.http.path
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import java.time.OffsetDateTime
 
-suspend fun getPayments(): List<PaymentResponse> {
-    val response: HttpResponse = client.request{
+suspend fun getPayments(
+    rental_id: String? = null,
+    amount: String? = null,
+    step: String? = null,
+    payment_date: String? = null,
+    payment_method: String? = null,
+    sortBy: String = "rental_id", // Поле для сортировки по умолчанию
+    sortDirection: String = "asc" // Направление сортировки по умолчанию
+): List<PaymentResponse> {
+
+    val response: HttpResponse = client.request {
         url {
             method = HttpMethod.Get
-            protocol = URLProtocol.HTTP
-            host = HOST
-            port = 5022
-            path("api/Payments/GetPayments")
+            host = HOST // Замените на ваш хост
+            port = 5022 // Убедитесь, что порту соответствует вашему серверу
+            path("/api/Payments/GetPayments") // Укажите только путь к API
+
+            // Добавьте параметры запроса
+            if (rental_id != null) parameters["rental_id"] = rental_id
+            if (amount != null) parameters["amount"] = amount
+            if (step != null) parameters["step"] = step
+            if (payment_date != null) parameters["payment_date"] = payment_date
+            if (payment_method != null) parameters["payment_method"] = payment_method
+            parameters["sortBy"] = sortBy
+            parameters["sortDirection"] = sortDirection
         }
         contentType(ContentType.Application.Json)
     }
 
-    if (response.status.value in 200..299) {
+    println("Response Status: ${response.status.value}")
+    return if (response.status.value in 200..299) {
         val result: List<PaymentResponse> = response.body()
         println(result)
-        return result
-    }
-    else {
+        result
+    } else {
+        println("Request failed with status: ${response.status.value}")
         val result: FailResponse = response.body()
         throw Exception(result.detail)
     }
@@ -90,7 +104,7 @@ suspend fun putPayment(paymentRequest: PaymentResponse): PaymentResponse {
             protocol = URLProtocol.HTTP
             host = HOST
             port = 5022
-            path("api/Payments/UpdatePayment")
+            path("api/Payments/UpdatePayment/${paymentRequest.payment_id}")
 
         }
         contentType(ContentType.Application.Json)
@@ -107,6 +121,8 @@ suspend fun putPayment(paymentRequest: PaymentResponse): PaymentResponse {
     }
 }
 
+
+
 suspend fun deletePayment(id: Long): PaymentResponse {
     val response: HttpResponse = client.request{
         url {
@@ -121,8 +137,21 @@ suspend fun deletePayment(id: Long): PaymentResponse {
     }
 
     if (response.status.value in 200..299) {
-        val result: PaymentResponse = response.body()
-        return result
+        if (response.status.value == 204){
+            val result = PaymentResponse(
+                payment_id = -1,
+                rental_id = -1,
+                amount = 0.0,
+                step = 0,
+                payment_date = OffsetDateTime.now(),
+                payment_method = ""
+            )
+            return result
+        }
+        else {
+            val result: PaymentResponse = response.body()
+            return result
+        }
     }
     else {
         val result: NotFoundResponse = response.body()

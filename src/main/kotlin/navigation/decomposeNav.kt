@@ -1,11 +1,8 @@
 package navigation
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
-import com.arkivanov.decompose.router.stack.pushNew
-import components.ChatScreenComponent
 import components.HomeScreenComponent
 import components.car.GetCarComponent
 import components.car.GetCarsComponent
@@ -35,7 +32,7 @@ class DecomposeNav(
         childFactory = ::createChild
     )
 
-    @OptIn(ExperimentalDecomposeApi::class)
+
     private fun createChild(
         config: Configuration,
         context: ComponentContext
@@ -44,8 +41,6 @@ class DecomposeNav(
             is Configuration.HomeScreen -> Child.HomeScreen(
                 component = HomeScreenComponent(
                     componentContext = context,
-                    onGoChat = { ip, port ->
-                    }
                 )
             )
             is Configuration.GetCustomersScreen -> Child.GetCustomersScreen(

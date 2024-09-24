@@ -6,8 +6,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.window.WindowDraggableArea
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,7 +29,7 @@ import icons.Compress
 import icons.Expand
 import icons.Minimize
 import navigation.DecomposeNav
-import ui.ChatScreen
+import resources.icons.CarSvgrepoCom
 import ui.HomeScreen
 import ui.car.GetCarScreen
 import ui.car.GetCarsScreen
@@ -290,15 +288,21 @@ fun WindowScope.AppBar(
             horizontalArrangement = Arrangement.Start
         )
         {
+            Spacer(modifier=Modifier.width(8.dp))
             Icon(
-                Icons.Filled.Star,
-                contentDescription = "AppIcon"
+                modifier = Modifier.size(36.dp),
+                imageVector = CarSvgrepoCom,
+                contentDescription = "AppIcon",
+                tint = Color.Yellow
+
             )
+            Spacer(modifier=Modifier.width(8.dp))
             Text(
                 text = "Сервис Аренды Авто (Админ)",
                 style = TextStyle(
                     color = Color.White,
-                    fontSize = 18.sp
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 )
             )
         }
@@ -312,7 +316,7 @@ fun WindowScope.AppBar(
             {
                 IconButton(onClick = onMinimize) {
                     Icon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(20.dp),
                         imageVector = Minimize,
                         contentDescription = null,
                         tint = Color.White
@@ -321,14 +325,14 @@ fun WindowScope.AppBar(
                 val isFloating = state.placement == WindowPlacement.Floating
                 IconButton(onClick = onMaximize) {
                     Icon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(20.dp),
                         imageVector =  if (isFloating) Expand else Compress ,
                         contentDescription = null,
                         tint = Color.White)
                 }
                 IconButton(onClick = onClose) {
                     Icon(
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(20.dp),
                         imageVector = Close,
                         contentDescription = null,
                         tint = Color.White

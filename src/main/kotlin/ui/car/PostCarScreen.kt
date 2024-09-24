@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +21,7 @@ import api.cars.CarRequest
 import carMakes
 import carModels
 import components.car.PostCarComponent
+import resources.icons.CarSvgrepoCom
 import widgets.PopupNotification
 
 @Composable
@@ -67,13 +66,13 @@ fun AddCarScreen(onCarAdded: () -> Unit, car: MutableState<CarRequest?>) {
 
             // Car image placeholder
             Image(
-                imageVector = Icons.Filled.Person,
+                imageVector = CarSvgrepoCom,
                 contentDescription = "Car Image",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 16.dp)
                     .align(Alignment.CenterHorizontally)
-                    .clip(CircleShape)
+                    .clip(CircleShape),
             )
 
             Text(

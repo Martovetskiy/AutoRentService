@@ -1,9 +1,12 @@
+@file:Suppress("PropertyName")
+
 package api.rentals
 
 import api.serial.OffsetDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime
 
+@Suppress("PropertyName")
 @Serializable
 data class RentalResponse(
     val rental_id: Long,

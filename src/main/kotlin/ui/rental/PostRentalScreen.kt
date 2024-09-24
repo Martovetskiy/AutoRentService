@@ -3,25 +3,22 @@ package ui.rental
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import api.rentals.RentalRequest
 import components.rental.PostRentalComponent
+import resources.icons.MoneyBankCheckPaymentChequeFinanceBusinessSvgrepoCom
 import widgets.PopupNotification
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -62,13 +59,12 @@ fun SurveyForm(onRentalAdded: () -> Unit, rental: MutableState<RentalRequest?>) 
         ) {
             // Изображение профиля
             Image(
-                imageVector = Icons.Filled.Person, // Замените на ресурс вашего изображения профиля
+                imageVector = MoneyBankCheckPaymentChequeFinanceBusinessSvgrepoCom, // Замените на ресурс вашего изображения профиля
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .clip(CircleShape) // Круглая форма
+                    .align(Alignment.CenterHorizontally) // Круглая форма
             )
 
             Text(

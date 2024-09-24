@@ -13,46 +13,63 @@ class GetCustomersComponent (
     
     private var _data: MutableState<List<CustomerResponse>> = mutableStateOf(
         mutableListOf()
-    );
-    private val _showPopup: MutableState<Boolean> = mutableStateOf(false);
+    )
+    private val _showFilter: MutableState<Boolean> = mutableStateOf(false)
+
+    private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
+    private val _firstName: MutableState<String?> = mutableStateOf(null)
+    private val _lastName: MutableState<String?> = mutableStateOf(null)
+    private val _email: MutableState<String?> = mutableStateOf(null)
+    private val _phone: MutableState<String?> = mutableStateOf(null)
+    private val _license: MutableState<String?> = mutableStateOf(null)
+    private val _isBanned: MutableState<Boolean?> = mutableStateOf(null)
+    private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
+    private val _sortBy: MutableState<String> = mutableStateOf("customer_id")
+    private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val showPopup = _showPopup
     val textPopup = _textPopup
+    val firstName = _firstName
+    val lastName = _lastName
+    val email = _email
+    val phone = _phone
+    val license = _license
+    val isBanned = _isBanned
+    val sortDirection = _sortDirection
+    val sortBy = _sortBy
+    val isLoad = _isLoad
 
-    var ascending = mutableStateOf(true)
+    val showFilter = _showFilter
+
     val sortedCustomers = _data
-    var selectedAttribute = mutableStateOf("customer_id") 
 
     init {
-        request2Data()
+        request2Get()
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    fun request2Data(){
+    fun request2Get(){
         GlobalScope.launch {
+            _isLoad.value = false
             try {
-                _data.value = getCustomers()
-                sort()
+                _data.value = getCustomers(
+                    firstName = _firstName.value,
+                    lastName = _lastName.value,
+                    email = _email.value,
+                    phoneNumber = _phone.value,
+                    driverLicense = _license.value,
+                    isBanned = _isBanned.value,
+                    sortDirection = _sortDirection.value,
+                    sortBy = _sortBy.value,
+                )
+                _isLoad.value = true
             }
             catch (e: Exception){
                 _textPopup.value = e.message.toString()
                 _showPopup.value = true
             }
-        }
-    }
 
-    fun sort(){
-        sortedCustomers.value = when (selectedAttribute.value) {
-            "customer_id" -> if (ascending.value) _data.value.sortedBy { it.customer_id } else _data.value.sortedByDescending { it.customer_id }
-            "first_name" -> if (ascending.value) _data.value.sortedBy { it.first_name } else _data.value.sortedByDescending { it.first_name }
-            "last_name" -> if (ascending.value) _data.value.sortedBy { it.last_name } else _data.value.sortedByDescending { it.last_name }
-            "email" -> if (ascending.value) _data.value.sortedBy { it.email } else _data.value.sortedByDescending { it.email }
-            "phone_number" -> if (ascending.value) _data.value.sortedBy { it.phone_number } else _data.value.sortedByDescending { it.phone_number }
-            "driver_license" -> if (ascending.value) _data.value.sortedBy { it.driver_license } else _data.value.sortedByDescending { it.driver_license }
-            "is_banned" -> if (ascending.value) _data.value.sortedBy { it.is_banned } else _data.value.sortedByDescending { it.is_banned }
-            "create_at" -> if (ascending.value) _data.value.sortedBy { it.create_at } else _data.value.sortedByDescending { it.create_at }
-            else -> _data.value
         }
     }
 }

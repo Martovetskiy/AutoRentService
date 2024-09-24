@@ -1,3 +1,6 @@
+@file:Suppress("EXTERNAL_SERIALIZER_USELESS")
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package api.serial
 
 import kotlinx.serialization.*

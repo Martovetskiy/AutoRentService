@@ -1,8 +1,6 @@
 package api.cars
 
-import api.serial.OffsetDateTimeSerializer
 import kotlinx.serialization.Serializable
-import java.time.OffsetDateTime
 
 @Serializable
 data class CarRequest(

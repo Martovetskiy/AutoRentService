@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +17,7 @@ import api.cars.CarResponse
 import carMakes
 import carModels
 import components.car.GetCarComponent
+import resources.icons.CarSvgrepoCom
 import widgets.PopupNotification
 
 @Composable
@@ -102,7 +101,7 @@ private fun EditCarScreen(component: GetCarComponent) {
         ) {
             // Изображение автомобиля (или иконка)
             Image(
-                imageVector = Icons.Outlined.Person,
+                imageVector = CarSvgrepoCom,
                 contentDescription = "Car Image",
                 modifier = Modifier
                     .size(120.dp)

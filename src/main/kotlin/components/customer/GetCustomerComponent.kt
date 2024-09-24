@@ -11,9 +11,9 @@ import kotlinx.coroutines.*
 class GetCustomerComponent (
     componentContext: ComponentContext,
 ): ComponentContext by componentContext {
-    private val _customer: MutableState<CustomerResponse?> = mutableStateOf(null);
-    private val _customerBuf: MutableState<CustomerResponse?> = mutableStateOf(null);
-    private val _showPopup: MutableState<Boolean> = mutableStateOf(false);
+    private val _customer: MutableState<CustomerResponse?> = mutableStateOf(null)
+    private val _customerBuf: MutableState<CustomerResponse?> = mutableStateOf(null)
+    private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
     private val _id: MutableState<Long?> = mutableStateOf(null)
 
@@ -76,6 +76,7 @@ class GetCustomerComponent (
                 _textPopup.value = "Пользователь успешно удален"
                 _isDelete.value = true
                 _isEdit.value = false
+                _customer.value = null
             }
             catch (e: Exception) {
                 _customer.value = null

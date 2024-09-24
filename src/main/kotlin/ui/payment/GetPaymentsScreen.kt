@@ -1,4 +1,4 @@
-package ui.rental
+package ui.payment
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -18,8 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import api.rentals.RentalResponse
-import components.rental.GetRentalsComponent
+import api.payments.PaymentResponse
+import components.payment.GetPaymentsComponent
 import resources.icons.FilterSvgrepoCom
 import widgets.PopupNotification
 import widgets.ShimmerEffect
@@ -27,18 +27,18 @@ import kotlin.reflect.KProperty1
 import kotlin.reflect.full.declaredMemberProperties
 
 @Composable
-fun GetRentalsScreen(component: GetRentalsComponent){
+fun GetPaymentsScreen(component: GetPaymentsComponent){
 
     var showFilter by remember { component.showFilter }
 
-    val attributeNames = RentalResponse::class.declaredMemberProperties.sortedBy { RentalResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
+    val attributeNames = PaymentResponse::class.declaredMemberProperties.sortedBy { PaymentResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
     val dictWeight: Map<String, Float> = mapOf(
+        "payment_id" to 1f,
         "rental_id" to 1f,
-        "customer_id" to 1f,
-        "car_id" to 1f,
-        "start_date" to 3f,
-        "end_date" to 3f,
-        "total_price" to 3f,
+        "amount" to 2f,
+        "step" to 2f,
+        "payment_date" to 3f,
+        "payment_method" to 2f,
         "create_at" to 3f
     )
     if (component.isLoad.value)
@@ -92,8 +92,8 @@ fun GetRentalsScreen(component: GetRentalsComponent){
                 }
             }
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(component.sortedRentals.value) { rental ->
-                    RentalRow(rental, dictWeight, attributeNames)
+                items(component.sortedPayments.value) { payment ->
+                    PaymentRow(payment, dictWeight, attributeNames)
                 }
             }
         }
@@ -107,11 +107,13 @@ fun GetRentalsScreen(component: GetRentalsComponent){
         }
     }
 
+
+
 }
 
 
 @Composable
-fun RentalRow(rental: RentalResponse, dictWeight: Map<String, Float>, attributeNames: List<KProperty1<RentalResponse, *>>) {
+fun PaymentRow(payment: PaymentResponse, dictWeight: Map<String, Float>, attributeNames: List<KProperty1<PaymentResponse, *>>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -121,7 +123,7 @@ fun RentalRow(rental: RentalResponse, dictWeight: Map<String, Float>, attributeN
     ) {
         repeat(attributeNames.size){i ->
             val atr = attributeNames[i]
-            val value = atr.get(rental).toString()
+            val value = atr.get(payment).toString()
             Box(
                 modifier = Modifier
                     .weight(dictWeight[atr.name]?: 10f)
@@ -137,35 +139,48 @@ fun RentalRow(rental: RentalResponse, dictWeight: Map<String, Float>, attributeN
         }
     }
 }
+
 @Composable
-private fun Filters(component: GetRentalsComponent){
-    val attributeNames = RentalResponse::class.declaredMemberProperties.sortedBy { RentalResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
+private fun Filters(component: GetPaymentsComponent){
+    val attributeNames = PaymentResponse::class.declaredMemberProperties.sortedBy { PaymentResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
 
     Column {
         Text(modifier = Modifier.padding(bottom = 16.dp), text ="Фильтрация", fontWeight = FontWeight.Bold, fontSize = 24.sp)
         for (attribute in attributeNames.slice(1..5)) {
             TextField(
                 value = when (attribute.name) {
-                    "customer_id" -> component.customerID.value ?: ""
-                    "car_id" -> component.carID.value ?: ""
-                    "start_date" -> component.startDate.value ?: ""
-                    "end_date" -> component.endDate.value ?: ""
-                    "total_price" -> component.totalPrice.value ?: ""
+                    "rental_id" -> component.rental_id.value ?: ""
+                    "amount" -> component.amount.value ?: ""
+                    "step" -> component.step.value ?: ""
+                    "payment_date" -> component.payment_date.value ?: ""
                     else -> ""
                 },
                 onValueChange = {
                     when (attribute.name) {
-                        "customer_id" -> component.customerID.value = it
-                        "car_id" -> component.carID.value = it
-                        "start_date" -> component.startDate.value = it
-                        "end_date" -> component.endDate.value = it
-                        "total_price" -> component.totalPrice.value = it
+                        "rental_id" -> component.rental_id.value = it
+                        "amount" -> component.amount.value  = it
+                        "step" -> component.step.value  = it
+                        "payment_date" -> component.payment_date.value  = it
                     }
                 },
                 label = { Text(attribute.name) },
                 modifier = Modifier.fillMaxWidth()
             )
         }
+        Row (verticalAlignment = Alignment.CenterVertically){
+            Text("Метод оплаты: ")
+            for (key in listOf("card", "cash", "gift_card")) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = component.payment_method.value == key,
+                        onClick = { component.payment_method.value = key }
+                    )
+                    Text(key)
+                }
+            }
+
+        }
+
         Text(modifier = Modifier.padding(vertical = 16.dp), text ="Сортировка", fontWeight = FontWeight.Bold, fontSize = 24.sp)
         Row (verticalAlignment = Alignment.CenterVertically){
             Text("Сортировать по: ")
@@ -196,7 +211,7 @@ private fun Filters(component: GetRentalsComponent){
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 component.showFilter.value = false
-                component.request2Get()}
+                component.request2Data()}
         ){
             Text("Применить")
         }

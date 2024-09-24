@@ -1,8 +1,9 @@
-package ui.rental
+package ui.payment
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -10,23 +11,24 @@ import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import api.rentals.RentalResponse
-import components.rental.GetRentalComponent
-import resources.icons.MoneyBankCheckPaymentChequeFinanceBusinessSvgrepoCom
+import api.payments.PaymentResponse
+import components.payment.GetPaymentComponent
+import resources.icons.DollarSvgrepoCom
 import widgets.PopupNotification
 import java.time.OffsetDateTime
 
 @Composable
-fun GetRentalScreen(component: GetRentalComponent) {
+fun GetPaymentScreen(component: GetPaymentComponent) {
     Box(contentAlignment = Alignment.Center) {
         Column {
             SearchWidget({ component.request2Get() }, component.id)
-            if (component.rental.value != null) {
-                EditRentalScreen(component)
+            if (component.payment.value != null) {
+                EditPaymentScreen(component)
             } else {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = "Введите ID и нажмите Найти", fontSize = 26.sp)
@@ -69,13 +71,13 @@ private fun SearchWidget(onSearch: () -> Unit, id: MutableState<Long?>) {
 }
 
 @Composable
-private fun EditRentalScreen(component: GetRentalComponent) {
-    // Состояния для редактируемых данных проката
-    val rentalId = component.rental.value!!.rental_id
-    val customerId = remember { mutableStateOf(component.rental.value!!.customer_id.toString()) }
-    val carId = remember { mutableStateOf(component.rental.value!!.car_id.toString()) }
-    val startDate = remember { mutableStateOf(component.rental.value!!.start_date.toString()) }
-    val endDate = remember { mutableStateOf(component.rental.value!!.end_date.toString()) }
+private fun EditPaymentScreen(component: GetPaymentComponent) {
+    // Состояния для редактируемых данных платежа
+    val paymentId = component.payment.value!!.payment_id
+    val rentalId = remember { mutableStateOf(component.payment.value!!.rental_id.toString()) }
+    val amount = remember { mutableStateOf(component.payment.value!!.amount.toString()) }
+    val paymentMethod = remember { mutableStateOf(component.payment.value!!.payment_method) }
+    val paymentDate = remember { mutableStateOf(component.payment.value!!.payment_date.toString()) }
 
     Box(
         modifier = Modifier
@@ -88,16 +90,17 @@ private fun EditRentalScreen(component: GetRentalComponent) {
                 .padding(16.dp)
         ) {
             Image(
-                imageVector = MoneyBankCheckPaymentChequeFinanceBusinessSvgrepoCom, // Замените на ресурс вашего изображения профиля
+                imageVector = DollarSvgrepoCom, // Замените на ресурс вашего изображения профиля
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(bottom = 16.dp)
-                    .align(Alignment.CenterHorizontally) // Круглая форма
+                    .align(Alignment.CenterHorizontally)
+                    .clip(CircleShape) // Круглая форма
             )
             Row(modifier = Modifier.padding(bottom = 16.dp).align(Alignment.CenterHorizontally)) {
                 Text(
-                    text = if (component.isEdit.value) "Редактировать аренду" else "Карточка аренды",
+                    text = if (component.isEdit.value) "Редактировать платеж" else "Карточка платежа",
                     fontSize = 26.sp,
                     fontWeight = FontWeight.Bold,
                 )
@@ -112,56 +115,55 @@ private fun EditRentalScreen(component: GetRentalComponent) {
             }
 
             if (component.isEdit.value) {
-                // Поля ввода для customerId и carId
+                // Поля ввода для rentalId, amount, paymentMethod и paymentDate
                 TextField(
-                    value = customerId.value,
-                    onValueChange = { customerId.value = it },
-                    label = { Text("ID Клиента") },
+                    value = rentalId.value,
+                    onValueChange = { rentalId.value = it },
+                    label = { Text("ID Проката") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
                 TextField(
-                    value = carId.value,
-                    onValueChange = { carId.value = it },
-                    label = { Text("ID Автомобиля") },
+                    value = amount.value,
+                    onValueChange = { amount.value = it },
+                    label = { Text("Сумма платежа") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
                 TextField(
-                    value = startDate.value,
-                    onValueChange = { startDate.value = it },
-                    label = { Text("Дата начала") },
+                    value = paymentMethod.value,
+                    onValueChange = { paymentMethod.value = it },
+                    label = { Text("Метод платежа") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
                 TextField(
-                    value = endDate.value,
-                    onValueChange = { endDate.value = it },
-                    label = { Text("Дата окончания") },
+                    value = paymentDate.value,
+                    onValueChange = { paymentDate.value = it },
+                    label = { Text("Дата платежа") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
-                // Кнопка для обновления данных о прокате
+                // Кнопка для обновления данных о платеже
                 Button(
                     onClick = {
-                        // Обновление объекта RentalResponse и вызов функции обратного вызова
-                        component.rentalBuf.value = RentalResponse(
-                            rental_id = rentalId,
-                            customer_id = customerId.value.toLong(), // Преобразование строки в Long
-                            car_id = carId.value.toLong(), // Преобразование строки в Long
-                            start_date = OffsetDateTime.parse(startDate.value),
-                            end_date = OffsetDateTime.parse(endDate.value),
-                            total_price = 1.0,
-                            create_at = component.rentalBuf.value!!.create_at
+                        // Обновление объекта PaymentResponse и вызов функции обратного вызова
+                        component.paymentBuf.value = PaymentResponse(
+                            payment_id = paymentId,
+                            rental_id = rentalId.value.toLong(), // Преобразование строки в Long
+                            amount = amount.value.toDouble(), // Преобразование строки в Double
+                            payment_method = paymentMethod.value,
+                            payment_date = OffsetDateTime.parse(paymentDate.value),
+                            create_at = component.paymentBuf.value!!.create_at
                         )
-                        component.request2UpdateRental()
+                        component.request2Put()
                     },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 ) {
-                    Text(text = "Обновить аренду")
+                    Text(text = "Обновить платеж")
                 }
 
-                // Кнопка для удаления проката
+                // Кнопка для удаления платежа
                 Button(
                     onClick = {
                         component.request2Delete()
@@ -169,17 +171,17 @@ private fun EditRentalScreen(component: GetRentalComponent) {
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = "Удалить аренду", color = Color.White)
+                    Text(text = "Удалить платеж", color = Color.White)
                 }
 
             } else {
                 // Режим просмотра
-                Text(text = "ID Клиента: ${component.rental.value!!.customer_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "ID Автомобиля: ${component.rental.value!!.car_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата начала: ${component.rental.value!!.start_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата окончания: ${component.rental.value!!.end_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Общая цена: ${component.rental.value!!.total_price}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Создано: ${component.rental.value!!.create_at}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Платежа: ${component.payment.value!!.payment_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Проката: ${component.payment.value!!.rental_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Сумма платежа: ${component.payment.value!!.amount}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Метод платежа: ${component.payment.value!!.payment_method}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата платежа: ${component.payment.value!!.payment_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Создано: ${component.payment.value!!.create_at}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
             }
         }
     }

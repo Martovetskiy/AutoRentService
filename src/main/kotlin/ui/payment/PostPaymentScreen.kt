@@ -9,8 +9,6 @@ import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import api.payments.PaymentRequest
 import components.payment.PostPaymentComponent
+import resources.icons.DollarSvgrepoCom
 import widgets.PopupNotification
 
 @Composable
@@ -38,17 +37,9 @@ fun SurveyForm(onPaymentAdded: () -> Unit, payment: MutableState<PaymentRequest?
     var rentalId by remember { mutableStateOf("") }
     var amount by remember { mutableStateOf("") }
     var step by remember { mutableStateOf("") }
-    var paymentDate by remember { mutableStateOf("") }
     var paymentMethod by remember { mutableStateOf("") }
 
     val paymentMethods = setOf("card", "cash", "gift_card")
-// Регулярное выражение для проверки формата даты "ГГГГ-ММ-ДД"
-    val dateRegex = Regex("""^\d{4}-\d{2}-\d{2}$""")
-
-    // Функция для проверки правильности даты
-    fun isValidDate(date: String): Boolean {
-        return dateRegex.matches(date)
-    }
 
     Box(
         modifier = Modifier
@@ -62,7 +53,7 @@ fun SurveyForm(onPaymentAdded: () -> Unit, payment: MutableState<PaymentRequest?
         ) {
             // Изображение профиля
             Image(
-                imageVector = Icons.Filled.Person, // Замените на ресурс вашего изображения профиля
+                imageVector = DollarSvgrepoCom, // Замените на ресурс вашего изображения профиля
                 contentDescription = "Profile Image",
                 modifier = Modifier
                     .size(120.dp)
