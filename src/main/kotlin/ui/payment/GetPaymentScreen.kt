@@ -73,11 +73,11 @@ private fun SearchWidget(onSearch: () -> Unit, id: MutableState<Long?>) {
 @Composable
 private fun EditPaymentScreen(component: GetPaymentComponent) {
     // Состояния для редактируемых данных платежа
-    val paymentId = component.payment.value!!.payment_id
-    val rentalId = remember { mutableStateOf(component.payment.value!!.rental_id.toString()) }
+    val paymentId = component.payment.value!!.paymentId
+    val rentalId = remember { mutableStateOf(component.payment.value!!.rentalId.toString()) }
     val amount = remember { mutableStateOf(component.payment.value!!.amount.toString()) }
-    val paymentMethod = remember { mutableStateOf(component.payment.value!!.payment_method) }
-    val paymentDate = remember { mutableStateOf(component.payment.value!!.payment_date.toString()) }
+    val paymentMethod = remember { mutableStateOf(component.payment.value!!.paymentMethod) }
+    val paymentDate = remember { mutableStateOf(component.payment.value!!.paymentDate.toString()) }
 
     Box(
         modifier = Modifier
@@ -149,12 +149,12 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
                     onClick = {
                         // Обновление объекта PaymentResponse и вызов функции обратного вызова
                         component.paymentBuf.value = PaymentResponse(
-                            payment_id = paymentId,
-                            rental_id = rentalId.value.toLong(), // Преобразование строки в Long
+                            paymentId = paymentId,
+                            rentalId = rentalId.value.toLong(), // Преобразование строки в Long
                             amount = amount.value.toDouble(), // Преобразование строки в Double
-                            payment_method = paymentMethod.value,
-                            payment_date = OffsetDateTime.parse(paymentDate.value),
-                            create_at = component.paymentBuf.value!!.create_at
+                            paymentMethod = paymentMethod.value,
+                            paymentDate = OffsetDateTime.parse(paymentDate.value),
+                            createAt = component.paymentBuf.value!!.createAt
                         )
                         component.request2Put()
                     },
@@ -176,12 +176,12 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
 
             } else {
                 // Режим просмотра
-                Text(text = "ID Платежа: ${component.payment.value!!.payment_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "ID Проката: ${component.payment.value!!.rental_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Платежа: ${component.payment.value!!.paymentId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Проката: ${component.payment.value!!.rentalId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Сумма платежа: ${component.payment.value!!.amount}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Метод платежа: ${component.payment.value!!.payment_method}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата платежа: ${component.payment.value!!.payment_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Создано: ${component.payment.value!!.create_at}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Метод платежа: ${component.payment.value!!.paymentMethod}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата платежа: ${component.payment.value!!.paymentDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Создано: ${component.payment.value!!.createAt}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
             }
         }
     }

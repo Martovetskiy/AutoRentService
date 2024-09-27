@@ -19,23 +19,23 @@ class GetPaymentsComponent (
     private val _showPopup: MutableState<Boolean> = mutableStateOf(false)
     private val _textPopup: MutableState<String> = mutableStateOf("")
 
-    private val _rental_id: MutableState<String?> = mutableStateOf(null)
+    private val _rentalId: MutableState<String?> = mutableStateOf(null)
     private val _amount: MutableState<String?> = mutableStateOf(null)
     private val _step: MutableState<String?> = mutableStateOf(null)
-    private val _payment_date: MutableState<String?> = mutableStateOf(null)
-    private val _payment_method: MutableState<String?> = mutableStateOf(null)
+    private val _paymentDate: MutableState<String?> = mutableStateOf(null)
+    private val _paymentMethod: MutableState<String?> = mutableStateOf(null)
     private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
-    private val _sortBy: MutableState<String> = mutableStateOf("rental_id")
+    private val _sortBy: MutableState<String> = mutableStateOf("rentalId")
     private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val showPopup = _showPopup
     val textPopup = _textPopup
 
-    val rental_id =_rental_id
+    val rentalId =_rentalId
     val amount = _amount
     val step = _step
-    val payment_date = _payment_date
-    val payment_method = _payment_method
+    val paymentDate = _paymentDate
+    val paymentMethod = _paymentMethod
 
     val sortDirection = _sortDirection
     val sortBy = _sortBy
@@ -52,15 +52,14 @@ class GetPaymentsComponent (
     @OptIn(DelicateCoroutinesApi::class)
     fun request2Data(){
         GlobalScope.launch {
-            _showFilter.value = false
             _isLoad.value = false
             try {
                 _data.value = getPayments(
-                    rental_id = _rental_id.value,
+                    rentalId = _rentalId.value,
                     amount = _amount.value,
                     step = _step.value,
-                    payment_date = _payment_date.value,
-                    payment_method = _payment_method.value,
+                    paymentDate = _paymentDate.value,
+                    paymentMethod = _paymentMethod.value,
                     sortDirection = _sortDirection.value,
                     sortBy = _sortBy.value
                 )

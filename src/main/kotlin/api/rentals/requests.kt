@@ -6,11 +6,11 @@ import java.time.OffsetDateTime
 
 @Serializable
 data class RentalRequest(
-    val customer_id: Long,
-    val car_id: Long,
+    val customerId: Long,
+    val carId: Long,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val start_date: OffsetDateTime,
+    val startDate: OffsetDateTime,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val end_date: OffsetDateTime,
-    val total_price: Double = 0.0
+    val endDate: OffsetDateTime,
+    val totalPrice: Double = 0.0
 )

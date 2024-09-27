@@ -2,16 +2,10 @@ package api.cutomers
 
 import api.HOST
 import api.client
-import io.ktor.client.call.body
-import io.ktor.client.request.request
-import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.ContentType
-import io.ktor.http.HttpMethod
-import io.ktor.http.URLProtocol
-import io.ktor.http.contentType
-import io.ktor.http.path
-import java.time.OffsetDateTime
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 
 suspend fun getCustomers(
     firstName: String? = null,
@@ -20,8 +14,8 @@ suspend fun getCustomers(
     phoneNumber: String? = null,
     driverLicense: String? = null,
     isBanned: Boolean? = null,
-    sortBy: String = "customer_id", // Поле для сортировки по умолчанию
-    sortDirection: String = "asc" // Направление сортировки по умолчанию
+    sortBy: String = "customerId", // Поле для сортировки по умолчанию
+    sortDirection: String = "ASC" // Направление сортировки по умолчанию
 ): List<CustomerResponse> {
 
     val response: HttpResponse = client.request {
@@ -50,8 +44,8 @@ suspend fun getCustomers(
         println(result)
         result
     } else {
-        println("Request failed with status: ${response.status.value}")
         val result: FailResponse = response.body()
+        println(result.detail)
         throw Exception(result.detail)
     }
 }
@@ -111,7 +105,7 @@ suspend fun putCustomer(customerRequest: CustomerResponse): CustomerResponse {
             protocol = URLProtocol.HTTP
             host = HOST
             port = 5022
-            path("api/Customers/UpdateCustomer/${customerRequest.customer_id}")
+            path("api/Customers/UpdateCustomer/${customerRequest.customerId}")
 
         }
         contentType(ContentType.Application.Json)
@@ -128,7 +122,7 @@ suspend fun putCustomer(customerRequest: CustomerResponse): CustomerResponse {
     }
 }
 
-suspend fun deleteCustomer(id: Long): CustomerResponse {
+suspend fun deleteCustomer(id: Long): CustomerResponse? {
     val response: HttpResponse = client.request{
         url {
             method = HttpMethod.Delete
@@ -142,17 +136,8 @@ suspend fun deleteCustomer(id: Long): CustomerResponse {
     }
 
     if (response.status.value in 200..299) {
-        if (response.status.value == 204){
-            val result = CustomerResponse(
-                customer_id = -1,
-                first_name = "",
-                last_name = "",
-                email = "",
-                phone_number = "",
-                driver_license = "",
-                is_banned = true,
-                create_at = OffsetDateTime.now()
-            )
+        if (response.status.value == 200){
+            val result = null
             return result
         }
         else{

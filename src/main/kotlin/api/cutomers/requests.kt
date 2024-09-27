@@ -1,13 +1,25 @@
 package api.cutomers
 
+import api.serial.OffsetDateTimeSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.time.OffsetDateTime
 
 @Serializable
 data class CustomerRequest(
-    val first_name: String,
-    val last_name: String,
+    @SerialName("firstName")
+    val firstName: String,
+    @SerialName("lastName")
+    val lastName: String,
+    @SerialName("email")
     val email: String,
-    val phone_number: String,
-    val driver_license: String,
-    var is_banned: Boolean = false,
+    @SerialName("phoneNumber")
+    val phoneNumber: String,
+    @SerialName("driverLicense")
+    val driverLicense: String,
+    @SerialName("isBanned")
+    var isBanned: Boolean = false,
+    @SerialName("createAt")
+    @Serializable(with = OffsetDateTimeSerializer::class)
+    val createAt: OffsetDateTime = OffsetDateTime.now()
 )

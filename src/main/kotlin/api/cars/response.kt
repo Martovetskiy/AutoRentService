@@ -1,19 +1,29 @@
 package api.cars
 
 import api.serial.OffsetDateTimeSerializer
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.OffsetDateTime
 
 @Serializable
 data class CarResponse(
-    val car_id: Long,
+    @SerialName("carId")
+    val carId: Long,
+    @SerialName("make")
     val make: String,
+    @SerialName("model")
     val model: String,
+    @SerialName("year")
     val year: Int,
-    val color_hex: String,
-    val price_per_day: Double,
-    val number_plate: String,
+    @SerialName("colorHex")
+    val colorHex: String,
+    @SerialName("pricePerDay")
+    val pricePerDay: Double,
+    @SerialName("numberPlate")
+    val numberPlate: String,
+    @SerialName("status")
     val status: String,
+    @SerialName("createAt")
     @Serializable(with = OffsetDateTimeSerializer::class)
-    var create_at: OffsetDateTime = OffsetDateTime.now()
+    var createAt: OffsetDateTime = OffsetDateTime.now()
 )

@@ -6,13 +6,13 @@ import java.time.OffsetDateTime
 
 @Serializable
 data class PaymentResponse(
-    val payment_id: Long,
-    val rental_id: Long,
+    val paymentId: Long,
+    val rentalId: Long,
     val amount: Double,
     var step: Int = 1,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val payment_date: OffsetDateTime = OffsetDateTime.now(),
-    val payment_method: String,
+    val paymentDate: OffsetDateTime = OffsetDateTime.now(),
+    val paymentMethod: String,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val create_at: OffsetDateTime = OffsetDateTime.now()
+    val createAt: OffsetDateTime = OffsetDateTime.now()
 )

@@ -8,15 +8,14 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import java.time.OffsetDateTime
 
 suspend fun getPayments(
-    rental_id: String? = null,
+    rentalId: String? = null,
     amount: String? = null,
     step: String? = null,
-    payment_date: String? = null,
-    payment_method: String? = null,
-    sortBy: String = "rental_id", // Поле для сортировки по умолчанию
+    paymentDate: String? = null,
+    paymentMethod: String? = null,
+    sortBy: String = "paymentId", // Поле для сортировки по умолчанию
     sortDirection: String = "asc" // Направление сортировки по умолчанию
 ): List<PaymentResponse> {
 
@@ -28,11 +27,11 @@ suspend fun getPayments(
             path("/api/Payments/GetPayments") // Укажите только путь к API
 
             // Добавьте параметры запроса
-            if (rental_id != null) parameters["rental_id"] = rental_id
+            if (rentalId != null) parameters["rentalId"] = rentalId
             if (amount != null) parameters["amount"] = amount
             if (step != null) parameters["step"] = step
-            if (payment_date != null) parameters["payment_date"] = payment_date
-            if (payment_method != null) parameters["payment_method"] = payment_method
+            if (paymentDate != null) parameters["paymentDate"] = paymentDate
+            if (paymentMethod != null) parameters["paymentMethod"] = paymentMethod
             parameters["sortBy"] = sortBy
             parameters["sortDirection"] = sortDirection
         }
@@ -104,7 +103,7 @@ suspend fun putPayment(paymentRequest: PaymentResponse): PaymentResponse {
             protocol = URLProtocol.HTTP
             host = HOST
             port = 5022
-            path("api/Payments/UpdatePayment/${paymentRequest.payment_id}")
+            path("api/Payments/UpdatePayment/${paymentRequest.paymentId}")
 
         }
         contentType(ContentType.Application.Json)
@@ -123,7 +122,7 @@ suspend fun putPayment(paymentRequest: PaymentResponse): PaymentResponse {
 
 
 
-suspend fun deletePayment(id: Long): PaymentResponse {
+suspend fun deletePayment(id: Long): PaymentResponse? {
     val response: HttpResponse = client.request{
         url {
             method = HttpMethod.Delete
@@ -137,15 +136,8 @@ suspend fun deletePayment(id: Long): PaymentResponse {
     }
 
     if (response.status.value in 200..299) {
-        if (response.status.value == 204){
-            val result = PaymentResponse(
-                payment_id = -1,
-                rental_id = -1,
-                amount = 0.0,
-                step = 0,
-                payment_date = OffsetDateTime.now(),
-                payment_method = ""
-            )
+        if (response.status.value == 200){
+            val result = null
             return result
         }
         else {

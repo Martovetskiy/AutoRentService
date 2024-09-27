@@ -179,9 +179,9 @@ fun AddCarScreen(onCarAdded: () -> Unit, car: MutableState<CarRequest?>) {
                         make = make.value,
                         model = model.value,
                         year = year.value.toInt(), // Convert year to Integer
-                        color_hex = colorHex.value,
-                        price_per_day = pricePerDay.value.toDouble(), // Convert price to Float
-                        number_plate = numberPlate.value,
+                        colorHex = colorHex.value,
+                        pricePerDay = pricePerDay.value.toDouble(), // Convert price to Float
+                        numberPlate = numberPlate.value,
                         status = status.value // Add status to CarRequest
                     )
                     car.value = newCar

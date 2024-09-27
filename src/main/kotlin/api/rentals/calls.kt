@@ -9,15 +9,14 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import java.time.OffsetDateTime
 
 suspend fun getRentals(
-    customer_id: String? = null,
-    car_id: String? = null,
-    start_date: String? = null,
-    end_date: String? = null,
-    total_price: String? = null,
-    sortBy: String = "rental_id", // Поле для сортировки по умолчанию
+    customerId: String? = null,
+    carId: String? = null,
+    startDate: String? = null,
+    endDate: String? = null,
+    totalPrice: String? = null,
+    sortBy: String = "rentalId", // Поле для сортировки по умолчанию
     sortDirection: String = "asc" // Направление сортировки по умолчанию
 ): List<RentalResponse> {
 
@@ -29,11 +28,11 @@ suspend fun getRentals(
             path("/api/Rentals/GetRentals") // Укажите только путь к API
 
             // Добавьте параметры запроса
-            if (customer_id != null) parameters["customer_id"] = customer_id
-            if (car_id != null) parameters["car_id"] = car_id
-            if (start_date != null) parameters["start_date"] = start_date
-            if (end_date != null) parameters["end_date"] = end_date
-            if (total_price != null) parameters["total_price"] = total_price
+            if (customerId != null) parameters["customerId"] = customerId
+            if (carId != null) parameters["carId"] = carId
+            if (startDate != null) parameters["startDate"] = startDate
+            if (endDate != null) parameters["endDate"] = endDate
+            if (totalPrice != null) parameters["totalPrice"] = totalPrice
             parameters["sortBy"] = sortBy
             parameters["sortDirection"] = sortDirection
         }
@@ -80,7 +79,7 @@ suspend fun putRental(rentalRequest: RentalResponse): RentalResponse {
             protocol = URLProtocol.HTTP
             host = HOST
             port = 5022
-            path("api/Rentals/UpdateRental/${rentalRequest.rental_id}")
+            path("api/Rentals/UpdateRental/${rentalRequest.rentalId}")
         }
         contentType(ContentType.Application.Json)
         setBody(rentalRequest)
@@ -121,7 +120,7 @@ suspend fun postRental(rentalRequest: RentalRequest): RentalResponse {
 }
 
 
-suspend fun deleteRental(id: Long): RentalResponse {
+suspend fun deleteRental(id: Long): RentalResponse? {
     val response: HttpResponse = client.request{
         url {
             method = HttpMethod.Delete
@@ -135,16 +134,8 @@ suspend fun deleteRental(id: Long): RentalResponse {
     }
 
     if (response.status.value in 200..299) {
-        if (response.status.value == 204){
-            val result = RentalResponse(
-                rental_id = -1,
-                customer_id = -1,
-                car_id = -1,
-                start_date = OffsetDateTime.now(),
-                end_date = OffsetDateTime.now(),
-                total_price = 0.0,
-                create_at = OffsetDateTime.now()
-            )
+        if (response.status.value == 200){
+            val result = null
             return result
         }
         else {

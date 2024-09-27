@@ -8,17 +8,16 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import java.time.OffsetDateTime
 
 suspend fun getCars(
     make: String? = null,
     model: String? = null,
     year: String? = null,
-    color_hex: String? = null,
-    price_per_day: String? = null,
-    number_plate: String? = null,
+    colorHex: String? = null,
+    pricePerDay: String? = null,
+    numberPlate: String? = null,
     status: String? = null,
-    sortBy: String = "customer_id", // Поле для сортировки по умолчанию
+    sortBy: String = "carId", // Поле для сортировки по умолчанию
     sortDirection: String = "asc" // Направление сортировки по умолчанию
 ): List<CarResponse> {
 
@@ -33,9 +32,9 @@ suspend fun getCars(
             if (make != null) parameters["make"] = make
             if (model != null) parameters["model"] = model
             if (year != null) parameters["year"] = year
-            if (color_hex != null) parameters["color_hex"] = color_hex
-            if (price_per_day != null) parameters["price_per_day"] = price_per_day
-            if (number_plate != null) parameters["number_plate"] = number_plate
+            if (colorHex != null) parameters["colorHex"] = colorHex
+            if (pricePerDay != null) parameters["pricePerDay"] = pricePerDay
+            if (numberPlate != null) parameters["numberPlate"] = numberPlate
             if (status != null) parameters["status"] = status
             parameters["sortBy"] = sortBy
             parameters["sortDirection"] = sortDirection
@@ -108,7 +107,7 @@ suspend fun putCar(carRequest: CarResponse): CarResponse {
             protocol = URLProtocol.HTTP
             host = HOST
             port = 5022
-            path("api/Cars/UpdateCar/${carRequest.car_id}")
+            path("api/Cars/UpdateCar/${carRequest.carId}")
 
         }
         contentType(ContentType.Application.Json)
@@ -125,7 +124,7 @@ suspend fun putCar(carRequest: CarResponse): CarResponse {
     }
 }
 
-suspend fun deleteCar(id: Long): CarResponse {
+suspend fun deleteCar(id: Long): CarResponse? {
     val response: HttpResponse = client.request{
         url {
             method = HttpMethod.Delete
@@ -139,18 +138,8 @@ suspend fun deleteCar(id: Long): CarResponse {
     }
 
     if (response.status.value in 200..299) {
-        if (response.status.value == 204){
-            val result = CarResponse(
-                car_id = -1,
-                make = "",
-                model = "",
-                year = 0,
-                color_hex = "",
-                price_per_day = 0.0,
-                number_plate = "",
-                status = "",
-                create_at = OffsetDateTime.now() // Create_at is not returned by the server for deleted cars, so we set it to current time by default.
-            )
+        if (response.status.value == 200){
+            val result = null
             return result
         }
         else {

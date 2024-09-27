@@ -33,13 +33,13 @@ fun GetPaymentsScreen(component: GetPaymentsComponent){
 
     val attributeNames = PaymentResponse::class.declaredMemberProperties.sortedBy { PaymentResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
     val dictWeight: Map<String, Float> = mapOf(
-        "payment_id" to 1f,
-        "rental_id" to 1f,
+        "paymentId" to 1f,
+        "rentalId" to 1f,
         "amount" to 2f,
         "step" to 2f,
-        "payment_date" to 3f,
-        "payment_method" to 2f,
-        "create_at" to 3f
+        "paymentDate" to 3f,
+        "paymentMethod" to 2f,
+        "createAt" to 3f
     )
     if (component.isLoad.value)
     Box(contentAlignment = Alignment.Center) {
@@ -149,18 +149,18 @@ private fun Filters(component: GetPaymentsComponent){
         for (attribute in attributeNames.slice(1..5)) {
             TextField(
                 value = when (attribute.name) {
-                    "rental_id" -> component.rental_id.value ?: ""
+                    "rentalId" -> component.rentalId.value ?: ""
                     "amount" -> component.amount.value ?: ""
                     "step" -> component.step.value ?: ""
-                    "payment_date" -> component.payment_date.value ?: ""
+                    "paymentDate" -> component.paymentDate.value ?: ""
                     else -> ""
                 },
                 onValueChange = {
                     when (attribute.name) {
-                        "rental_id" -> component.rental_id.value = it
+                        "rentalId" -> component.rentalId.value = it
                         "amount" -> component.amount.value  = it
                         "step" -> component.step.value  = it
-                        "payment_date" -> component.payment_date.value  = it
+                        "paymentDate" -> component.paymentDate.value  = it
                     }
                 },
                 label = { Text(attribute.name) },
@@ -172,8 +172,8 @@ private fun Filters(component: GetPaymentsComponent){
             for (key in listOf("card", "cash", "gift_card")) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = component.payment_method.value == key,
-                        onClick = { component.payment_method.value = key }
+                        selected = component.paymentMethod.value == key,
+                        onClick = { component.paymentMethod.value = key }
                     )
                     Text(key)
                 }

@@ -9,14 +9,14 @@ import java.time.OffsetDateTime
 @Suppress("PropertyName")
 @Serializable
 data class RentalResponse(
-    val rental_id: Long,
-    val customer_id: Long,
-    val car_id: Long,
+    val rentalId: Long,
+    val customerId: Long,
+    val carId: Long,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val start_date: OffsetDateTime,
+    val startDate: OffsetDateTime,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val end_date: OffsetDateTime,
-    val total_price: Double,
+    val endDate: OffsetDateTime,
+    val totalPrice: Double,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val create_at: OffsetDateTime
+    val createAt: OffsetDateTime
 )

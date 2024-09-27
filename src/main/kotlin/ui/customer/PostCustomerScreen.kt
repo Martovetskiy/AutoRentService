@@ -113,12 +113,12 @@ fun AddUserScreen(onUserAdded: () -> Unit, customer: MutableState<CustomerReques
                 onClick = {
                     // Создание объекта CustomerResponse и вызов функции обратного вызова
                     val newUser = CustomerRequest(
-                        first_name = firstName.value,
-                        last_name = lastName.value,
+                        firstName = firstName.value,
+                        lastName = lastName.value,
                         email = email.value,
-                        phone_number = phoneNumber.value,
-                        driver_license = driverLicense.value,
-                        is_banned = false, // Или ваш логика по умолчанию
+                        phoneNumber = phoneNumber.value,
+                        driverLicense = driverLicense.value,
+                        isBanned = false, // Или ваш логика по умолчанию
                     )
                     customer.value = newUser
                     onUserAdded()

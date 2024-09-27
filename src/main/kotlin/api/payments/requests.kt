@@ -6,10 +6,10 @@ import java.time.OffsetDateTime
 
 @Serializable
 data class PaymentRequest(
-    val rental_id: Long,
+    val rentalId: Long,
     val amount: Double,
     var step: Int = 1,
     @Serializable(with = OffsetDateTimeSerializer::class)
-    val payment_date: OffsetDateTime = OffsetDateTime.now(),
-    val payment_method: String,
+    val paymentDate: OffsetDateTime = OffsetDateTime.now(),
+    val paymentMethod: String,
 )

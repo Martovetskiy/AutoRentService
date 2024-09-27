@@ -122,10 +122,10 @@ fun SurveyForm(onPaymentAdded: () -> Unit, payment: MutableState<PaymentRequest?
                         && paymentMethod in paymentMethods,
                 onClick = {
                     val newPayment = PaymentRequest(
-                        rental_id = rentalId.toLong(),
+                        rentalId = rentalId.toLong(),
                         amount = amount.toDouble(),
                         step = step.toInt(),
-                        payment_method = paymentMethod
+                        paymentMethod = paymentMethod
                     )
                     payment.value = newPayment
                     onPaymentAdded()

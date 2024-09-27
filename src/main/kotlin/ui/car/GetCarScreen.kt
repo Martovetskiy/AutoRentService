@@ -76,9 +76,9 @@ private fun EditCarScreen(component: GetCarComponent) {
     val make = remember { mutableStateOf(component.car.value!!.make) }
     val model = remember { mutableStateOf(component.car.value!!.model) }
     val year = remember { mutableStateOf(component.car.value!!.year.toString()) }
-    val colorHex = remember { mutableStateOf(component.car.value!!.color_hex) }
-    val pricePerDay = remember { mutableStateOf(component.car.value!!.price_per_day.toString()) }
-    val numberPlate = remember { mutableStateOf(component.car.value!!.number_plate) }
+    val colorHex = remember { mutableStateOf(component.car.value!!.colorHex) }
+    val pricePerDay = remember { mutableStateOf(component.car.value!!.pricePerDay.toString()) }
+    val numberPlate = remember { mutableStateOf(component.car.value!!.numberPlate) }
     val status = remember { mutableStateOf(component.car.value!!.status) }
 
     val patternYear = Regex("""^\d{4}$""")
@@ -220,15 +220,15 @@ private fun EditCarScreen(component: GetCarComponent) {
                     onClick = {
                         // Обновление объекта CarResponse и вызов функции обратного вызова
                         component.carBuf.value = CarResponse(
-                            car_id = component.carBuf.value!!.car_id,
+                            carId = component.carBuf.value!!.carId,
                             make = make.value,
                             model = model.value,
                             year = year.value.toInt(), // Convert year to Integer
-                            color_hex = colorHex.value,
-                            price_per_day = pricePerDay.value.toDouble(), // Convert price to Float
-                            number_plate = numberPlate.value,
+                            colorHex = colorHex.value,
+                            pricePerDay = pricePerDay.value.toDouble(), // Convert price to Float
+                            numberPlate = numberPlate.value,
                             status = status.value,
-                            create_at = component.carBuf.value!!.create_at
+                            createAt = component.carBuf.value!!.createAt
                         )
                         component.request2Put()
                     },
@@ -251,9 +251,9 @@ private fun EditCarScreen(component: GetCarComponent) {
                 Text(text = "Марка: ${component.car.value!!.make}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Модель: ${component.car.value!!.model}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Год: ${component.car.value!!.year}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Цвет: ${component.car.value!!.color_hex}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Цена за день: ${component.car.value!!.price_per_day}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Номерной знак: ${component.car.value!!.number_plate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Цвет: ${component.car.value!!.colorHex}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Цена за день: ${component.car.value!!.pricePerDay}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Номерной знак: ${component.car.value!!.numberPlate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Статус: ${component.car.value!!.status}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 16.dp))
             }
         }

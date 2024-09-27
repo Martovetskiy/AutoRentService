@@ -30,14 +30,14 @@ fun GetCustomersScreen(component: GetCustomersComponent){
     var showFilter by remember {component.showFilter}
 
     val dictWeight: Map<String, Float> = mapOf(
-        "customer_id" to 1f,
-        "first_name" to 2f,
-        "last_name" to 2f,
+        "customerId" to 1f,
+        "firstName" to 2f,
+        "lastName" to 2f,
         "email" to 3f,
-        "phone_number" to 2f,
-        "driver_license" to 2f,
-        "is_banned" to 2f,
-        "create_at" to 2f
+        "phoneNumber" to 2f,
+        "driverLicense" to 2f,
+        "isBanned" to 2f,
+        "createAt" to 2f
     )
 
 
@@ -150,20 +150,20 @@ private fun Filters(component: GetCustomersComponent){
         for (attribute in attributeNames.slice(1..5)) {
             TextField(
                 value = when (attribute.name) {
-                    "first_name" -> component.firstName.value ?: ""
-                    "last_name" -> component.lastName.value ?: ""
+                    "firstName" -> component.firstName.value ?: ""
+                    "lastName" -> component.lastName.value ?: ""
                     "email" -> component.email.value ?: ""
-                    "phone_number" -> component.phone.value ?: ""
-                    "driver_license" -> component.license.value ?: ""
+                    "phoneNumber" -> component.phone.value ?: ""
+                    "driverLicense" -> component.license.value ?: ""
                     else -> ""
                 },
                 onValueChange = {
                     when (attribute.name) {
-                        "first_name" -> component.firstName.value = it
-                        "last_name" -> component.lastName.value = it
+                        "firstName" -> component.firstName.value = it
+                        "lastName" -> component.lastName.value = it
                         "email" -> component.email.value = it
-                        "phone_number" -> component.phone.value = it
-                        "driver_license" -> component.license.value = it
+                        "phoneNumber" -> component.phone.value = it
+                        "driverLicense" -> component.license.value = it
                     }
                 },
                 label = { Text(attribute.name) },
@@ -203,7 +203,6 @@ private fun Filters(component: GetCustomersComponent){
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                component.showFilter.value = false
                 component.request2Get()}
         ){
             Text("Применить")

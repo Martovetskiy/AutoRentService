@@ -33,13 +33,13 @@ fun GetRentalsScreen(component: GetRentalsComponent){
 
     val attributeNames = RentalResponse::class.declaredMemberProperties.sortedBy { RentalResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
     val dictWeight: Map<String, Float> = mapOf(
-        "rental_id" to 1f,
-        "customer_id" to 1f,
-        "car_id" to 1f,
-        "start_date" to 3f,
-        "end_date" to 3f,
-        "total_price" to 3f,
-        "create_at" to 3f
+        "rentalId" to 1f,
+        "customerId" to 1f,
+        "carId" to 1f,
+        "startDate" to 3f,
+        "endDate" to 3f,
+        "totalPrice" to 3f,
+        "createAt" to 3f
     )
     if (component.isLoad.value)
     Box(contentAlignment = Alignment.Center) {
@@ -146,20 +146,20 @@ private fun Filters(component: GetRentalsComponent){
         for (attribute in attributeNames.slice(1..5)) {
             TextField(
                 value = when (attribute.name) {
-                    "customer_id" -> component.customerID.value ?: ""
-                    "car_id" -> component.carID.value ?: ""
-                    "start_date" -> component.startDate.value ?: ""
-                    "end_date" -> component.endDate.value ?: ""
-                    "total_price" -> component.totalPrice.value ?: ""
+                    "customerId" -> component.customerID.value ?: ""
+                    "carId" -> component.carID.value ?: ""
+                    "startDate" -> component.startDate.value ?: ""
+                    "endDate" -> component.endDate.value ?: ""
+                    "totalPrice" -> component.totalPrice.value ?: ""
                     else -> ""
                 },
                 onValueChange = {
                     when (attribute.name) {
-                        "customer_id" -> component.customerID.value = it
-                        "car_id" -> component.carID.value = it
-                        "start_date" -> component.startDate.value = it
-                        "end_date" -> component.endDate.value = it
-                        "total_price" -> component.totalPrice.value = it
+                        "customerId" -> component.customerID.value = it
+                        "carId" -> component.carID.value = it
+                        "startDate" -> component.startDate.value = it
+                        "endDate" -> component.endDate.value = it
+                        "totalPrice" -> component.totalPrice.value = it
                     }
                 },
                 label = { Text(attribute.name) },

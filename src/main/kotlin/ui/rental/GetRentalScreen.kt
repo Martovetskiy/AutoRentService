@@ -71,11 +71,11 @@ private fun SearchWidget(onSearch: () -> Unit, id: MutableState<Long?>) {
 @Composable
 private fun EditRentalScreen(component: GetRentalComponent) {
     // Состояния для редактируемых данных проката
-    val rentalId = component.rental.value!!.rental_id
-    val customerId = remember { mutableStateOf(component.rental.value!!.customer_id.toString()) }
-    val carId = remember { mutableStateOf(component.rental.value!!.car_id.toString()) }
-    val startDate = remember { mutableStateOf(component.rental.value!!.start_date.toString()) }
-    val endDate = remember { mutableStateOf(component.rental.value!!.end_date.toString()) }
+    val rentalId = component.rental.value!!.rentalId
+    val customerId = remember { mutableStateOf(component.rental.value!!.customerId.toString()) }
+    val carId = remember { mutableStateOf(component.rental.value!!.carId.toString()) }
+    val startDate = remember { mutableStateOf(component.rental.value!!.startDate.toString()) }
+    val endDate = remember { mutableStateOf(component.rental.value!!.endDate.toString()) }
 
     Box(
         modifier = Modifier
@@ -146,13 +146,13 @@ private fun EditRentalScreen(component: GetRentalComponent) {
                     onClick = {
                         // Обновление объекта RentalResponse и вызов функции обратного вызова
                         component.rentalBuf.value = RentalResponse(
-                            rental_id = rentalId,
-                            customer_id = customerId.value.toLong(), // Преобразование строки в Long
-                            car_id = carId.value.toLong(), // Преобразование строки в Long
-                            start_date = OffsetDateTime.parse(startDate.value),
-                            end_date = OffsetDateTime.parse(endDate.value),
-                            total_price = 1.0,
-                            create_at = component.rentalBuf.value!!.create_at
+                            rentalId = rentalId,
+                            customerId = customerId.value.toLong(), // Преобразование строки в Long
+                            carId = carId.value.toLong(), // Преобразование строки в Long
+                            startDate = OffsetDateTime.parse(startDate.value),
+                            endDate = OffsetDateTime.parse(endDate.value),
+                            totalPrice = 1.0,
+                            createAt = component.rentalBuf.value!!.createAt
                         )
                         component.request2UpdateRental()
                     },
@@ -174,12 +174,12 @@ private fun EditRentalScreen(component: GetRentalComponent) {
 
             } else {
                 // Режим просмотра
-                Text(text = "ID Клиента: ${component.rental.value!!.customer_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "ID Автомобиля: ${component.rental.value!!.car_id}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата начала: ${component.rental.value!!.start_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата окончания: ${component.rental.value!!.end_date}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Общая цена: ${component.rental.value!!.total_price}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Создано: ${component.rental.value!!.create_at}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Клиента: ${component.rental.value!!.customerId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "ID Автомобиля: ${component.rental.value!!.carId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата начала: ${component.rental.value!!.startDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата окончания: ${component.rental.value!!.endDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Общая цена: ${component.rental.value!!.totalPrice}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Создано: ${component.rental.value!!.createAt}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
             }
         }
     }

@@ -128,10 +128,10 @@ fun SurveyForm(onRentalAdded: () -> Unit, rental: MutableState<RentalRequest?>) 
                 onClick = {
                     // Создание объекта CustomerResponse и вызов функции обратного вызова
                     val newUser = RentalRequest(
-                        customer_id = customerId.toLong(),
-                        car_id = carId.toLong(),
-                        start_date = OffsetDateTime.parse(startDateInput + "T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-                        end_date = OffsetDateTime.parse(endDateInput + "T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                        customerId = customerId.toLong(),
+                        carId = carId.toLong(),
+                        startDate = OffsetDateTime.parse(startDateInput + "T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                        endDate = OffsetDateTime.parse(endDateInput + "T00:00:00Z", DateTimeFormatter.ISO_OFFSET_DATE_TIME)
                     )
                     rental.value = newUser
                     onRentalAdded()

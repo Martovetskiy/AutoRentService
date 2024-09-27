@@ -25,7 +25,7 @@ class GetRentalsComponent (
     private val _endDate: MutableState<String?> = mutableStateOf(null)
     private val _totalPrice: MutableState<String?> = mutableStateOf(null)
     private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
-    private val _sortBy: MutableState<String> = mutableStateOf("rental_id")
+    private val _sortBy: MutableState<String> = mutableStateOf("rentalId")
     private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val showPopup = _showPopup
@@ -51,15 +51,14 @@ class GetRentalsComponent (
     @OptIn(DelicateCoroutinesApi::class)
     fun request2Get(){
         GlobalScope.launch {
-            _showFilter.value = false
             _isLoad.value = false
             try {
                 _data.value = getRentals(
-                    customer_id = _customerID.value,
-                    car_id = _carID.value,
-                    start_date = _startDate.value,
-                    end_date = _endDate.value,
-                    total_price = _totalPrice.value,
+                    customerId = _customerID.value,
+                    carId = _carID.value,
+                    startDate = _startDate.value,
+                    endDate = _endDate.value,
+                    totalPrice = _totalPrice.value,
                     sortDirection = _sortDirection.value,
                     sortBy = _sortBy.value
                 )

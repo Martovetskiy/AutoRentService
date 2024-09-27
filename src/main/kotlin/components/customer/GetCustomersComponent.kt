@@ -25,7 +25,7 @@ class GetCustomersComponent (
     private val _license: MutableState<String?> = mutableStateOf(null)
     private val _isBanned: MutableState<Boolean?> = mutableStateOf(null)
     private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
-    private val _sortBy: MutableState<String> = mutableStateOf("customer_id")
+    private val _sortBy: MutableState<String> = mutableStateOf("customerId")
     private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val showPopup = _showPopup
@@ -52,6 +52,15 @@ class GetCustomersComponent (
     fun request2Get(){
         GlobalScope.launch {
             _isLoad.value = false
+            getCustomers(
+                firstName = _firstName.value,
+                lastName = _lastName.value,
+                email = _email.value,
+                phoneNumber = _phone.value,
+                driverLicense = _license.value,
+                isBanned = _isBanned.value,
+                sortDirection = _sortDirection.value,
+                sortBy = _sortBy.value)
             try {
                 _data.value = getCustomers(
                     firstName = _firstName.value,
@@ -63,6 +72,7 @@ class GetCustomersComponent (
                     sortDirection = _sortDirection.value,
                     sortBy = _sortBy.value,
                 )
+
                 _isLoad.value = true
             }
             catch (e: Exception){

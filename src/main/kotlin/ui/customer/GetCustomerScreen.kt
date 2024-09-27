@@ -72,12 +72,12 @@ private fun SearchWidget(onSearch: () -> Unit, id: MutableState<Long?>) {
 @Composable
 private fun EditUserScreen(component: GetCustomerComponent) {
     // Состояния для редактируемых данных
-    val firstName = remember { mutableStateOf(component.customer.value!!.first_name) }
-    val lastName = remember { mutableStateOf(component.customer.value!!.last_name) }
+    val firstName = remember { mutableStateOf(component.customer.value!!.firstName) }
+    val lastName = remember { mutableStateOf(component.customer.value!!.lastName) }
     val email = remember { mutableStateOf(component.customer.value!!.email) }
-    val phoneNumber = remember { mutableStateOf(component.customer.value!!.phone_number) }
-    val driverLicense = remember { mutableStateOf(component.customer.value!!.driver_license) }
-    val isBanned = remember { mutableStateOf(component.customer.value!!.is_banned) } // состояниe для статуса
+    val phoneNumber = remember { mutableStateOf(component.customer.value!!.phoneNumber) }
+    val driverLicense = remember { mutableStateOf(component.customer.value!!.driverLicense) }
+    val isBanned = remember { mutableStateOf(component.customer.value!!.isBanned) } // состояниe для статуса
 
     val patternEmail = Regex("""^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""")
     val patternPhone = Regex("""^\+\d{11}$""")
@@ -180,14 +180,14 @@ private fun EditUserScreen(component: GetCustomerComponent) {
                     onClick = {
                         // Обновление объекта CustomerResponse и вызов функции обратного вызова
                         component.customerBuf.value = CustomerResponse(
-                            customer_id = component.id.value!!,
-                            first_name = firstName.value,
-                            last_name = lastName.value,
+                            customerId = component.id.value!!,
+                            firstName = firstName.value,
+                            lastName = lastName.value,
                             email = email.value,
-                            phone_number = phoneNumber.value,
-                            driver_license = driverLicense.value,
-                            is_banned = isBanned.value,
-                            create_at = component.customerBuf.value!!.create_at
+                            phoneNumber = phoneNumber.value,
+                            driverLicense = driverLicense.value,
+                            isBanned = isBanned.value,
+                            createAt = component.customerBuf.value!!.createAt
                         )
                         component.request2Put()
             },
@@ -209,12 +209,12 @@ private fun EditUserScreen(component: GetCustomerComponent) {
             }
         } else {
         // Режим просмотра
-        Text(text = "Имя: ${component.customer.value!!.first_name}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-        Text(text = "Фамилия: ${component.customer.value!!.last_name}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(text = "Имя: ${component.customer.value!!.firstName}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(text = "Фамилия: ${component.customer.value!!.lastName}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
         Text(text = "Email: ${component.customer.value!!.email}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-        Text(text = "Телефон: ${component.customer.value!!.phone_number}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-        Text(text = "Водительские права: ${component.customer.value!!.driver_license}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-        Text(text = "Статус: ${if (component.customer.value!!.is_banned) "Забанен" else "Активен"}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 16.dp))
+        Text(text = "Телефон: ${component.customer.value!!.phoneNumber}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(text = "Водительские права: ${component.customer.value!!.driverLicense}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+        Text(text = "Статус: ${if (component.customer.value!!.isBanned) "Забанен" else "Активен"}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 16.dp))
     }
     }
 }

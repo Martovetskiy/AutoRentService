@@ -34,15 +34,15 @@ fun GetCarsScreen(component: GetCarsComponent) {
 
     val attributeNames = CarResponse::class.declaredMemberProperties.sortedBy { CarResponse::class.java.declaredFields.withIndex().associate { it1 -> it1.value.name to it1.index }[it.name] }
     val dictWeight: Map<String, Float> = mapOf(
-        "car_id" to 1f,
+        "carId" to 1f,
         "make" to 2f,
         "model" to 2f,
         "year" to 1.5f,
-        "color_hex" to 2f,
-        "price_per_day" to 2f,
-        "number_plate" to 2f,
+        "colorHex" to 2f,
+        "pricePerDay" to 2f,
+        "numberPlate" to 2f,
         "status" to 2f,
-        "create_at" to 2f
+        "createAt" to 2f
     )
     if (component.isLoad.value)
     Box(contentAlignment = Alignment.Center) {
@@ -225,18 +225,18 @@ private fun Filters(component: GetCarsComponent){
             TextField(
                 value = when (attribute.name) {
                     "year" -> component.year.value ?: ""
-                    "color_hex" -> component.colorHex.value ?: ""
-                    "price_per_day" -> component.pricePerDay.value ?: ""
-                    "number_plate" -> component.numberPlate.value ?: ""
+                    "colorHex" -> component.colorHex.value ?: ""
+                    "pricePerDay" -> component.pricePerDay.value ?: ""
+                    "numberPlate" -> component.numberPlate.value ?: ""
                     "status" -> component.status.value ?: ""
                     else -> ""
                 },
                 onValueChange = {
                     when (attribute.name) {
                         "year" -> component.year.value = it
-                        "color_hex" -> component.colorHex.value = it
-                        "price_per_day" -> component.pricePerDay.value = it
-                        "number_plate" -> component.numberPlate.value = it
+                        "colorHex" -> component.colorHex.value = it
+                        "pricePerDay" -> component.pricePerDay.value = it
+                        "numberPlate" -> component.numberPlate.value = it
                     }
                 },
                 label = { Text(attribute.name) },

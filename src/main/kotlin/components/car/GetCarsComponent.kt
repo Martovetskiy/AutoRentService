@@ -27,7 +27,7 @@ class GetCarsComponent (
     private val _numberPlate: MutableState<String?> = mutableStateOf(null)
     private val _status: MutableState<String?> = mutableStateOf(null)
     private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
-    private val _sortBy: MutableState<String> = mutableStateOf("car_id")
+    private val _sortBy: MutableState<String> = mutableStateOf("carId")
     private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val make = _make
@@ -54,16 +54,15 @@ class GetCarsComponent (
     @OptIn(DelicateCoroutinesApi::class)
     fun request2Get(){
         GlobalScope.launch {
-            _showFilter.value = false
             _isLoad.value = false
             try {
                 _data.value = getCars(
                     make = _make.value,
                     model = _model.value,
                     year = _year.value,
-                    color_hex = _colorHex.value,
-                    price_per_day = _pricePerDay.value,
-                    number_plate = _numberPlate.value,
+                    colorHex = _colorHex.value,
+                    pricePerDay = _pricePerDay.value,
+                    numberPlate = _numberPlate.value,
                     status = _status.value,
                     sortBy = _sortBy.value,
                     sortDirection = _sortDirection.value
