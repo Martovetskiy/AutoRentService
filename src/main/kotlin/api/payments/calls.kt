@@ -18,7 +18,6 @@ suspend fun getPayments(
     sortBy: String = "paymentId", // Поле для сортировки по умолчанию
     sortDirection: String = "asc" // Направление сортировки по умолчанию
 ): List<PaymentResponse> {
-
     val response: HttpResponse = client.request {
         url {
             method = HttpMethod.Get
@@ -38,13 +37,10 @@ suspend fun getPayments(
         contentType(ContentType.Application.Json)
     }
 
-    println("Response Status: ${response.status.value}")
     return if (response.status.value in 200..299) {
         val result: List<PaymentResponse> = response.body()
-        println(result)
         result
     } else {
-        println("Request failed with status: ${response.status.value}")
         val result: FailResponse = response.body()
         throw Exception(result.detail)
     }

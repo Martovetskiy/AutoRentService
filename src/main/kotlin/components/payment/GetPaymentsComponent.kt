@@ -25,7 +25,7 @@ class GetPaymentsComponent (
     private val _paymentDate: MutableState<String?> = mutableStateOf(null)
     private val _paymentMethod: MutableState<String?> = mutableStateOf(null)
     private val _sortDirection: MutableState<String> = mutableStateOf("ASC")
-    private val _sortBy: MutableState<String> = mutableStateOf("rentalId")
+    private val _sortBy: MutableState<String> = mutableStateOf("paymentId")
     private val _isLoad: MutableState<Boolean> = mutableStateOf(true)
 
     val showPopup = _showPopup

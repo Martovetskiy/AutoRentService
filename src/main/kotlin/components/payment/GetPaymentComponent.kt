@@ -43,7 +43,6 @@ class GetPaymentComponent (
                 _payment.value = null
                 _textPopup.value = e.message.toString()
                 _showPopup.value = true
-                print("Error getting payment")
             }
         }
     }

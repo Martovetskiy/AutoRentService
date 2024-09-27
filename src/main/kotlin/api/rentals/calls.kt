@@ -39,13 +39,10 @@ suspend fun getRentals(
         contentType(ContentType.Application.Json)
     }
 
-    println("Response Status: ${response.status.value}")
     return if (response.status.value in 200..299) {
         val result: List<RentalResponse> = response.body()
-        println(result)
         result
     } else {
-        println("Request failed with status: ${response.status.value}")
         val result: FailResponse = response.body()
         throw Exception(result.detail)
     }

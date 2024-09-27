@@ -76,6 +76,7 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
     val paymentId = component.payment.value!!.paymentId
     val rentalId = remember { mutableStateOf(component.payment.value!!.rentalId.toString()) }
     val amount = remember { mutableStateOf(component.payment.value!!.amount.toString()) }
+    val step = remember { mutableStateOf(component.payment.value!!.step.toString()) }
     val paymentMethod = remember { mutableStateOf(component.payment.value!!.paymentMethod) }
     val paymentDate = remember { mutableStateOf(component.payment.value!!.paymentDate.toString()) }
 
@@ -129,6 +130,12 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
                     label = { Text("Сумма платежа") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
+                TextField(
+                    value = step.value,
+                    onValueChange = { step.value = it },
+                    label = { Text("Шаг") },
+                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                )
 
                 TextField(
                     value = paymentMethod.value,
@@ -152,6 +159,7 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
                             paymentId = paymentId,
                             rentalId = rentalId.value.toLong(), // Преобразование строки в Long
                             amount = amount.value.toDouble(), // Преобразование строки в Double
+                            step = step.value.toInt(),
                             paymentMethod = paymentMethod.value,
                             paymentDate = OffsetDateTime.parse(paymentDate.value),
                             createAt = component.paymentBuf.value!!.createAt
@@ -179,6 +187,7 @@ private fun EditPaymentScreen(component: GetPaymentComponent) {
                 Text(text = "ID Платежа: ${component.payment.value!!.paymentId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "ID Проката: ${component.payment.value!!.rentalId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Сумма платежа: ${component.payment.value!!.amount}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Шаг: ${component.payment.value!!.step}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Метод платежа: ${component.payment.value!!.paymentMethod}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Дата платежа: ${component.payment.value!!.paymentDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Создано: ${component.payment.value!!.createAt}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))

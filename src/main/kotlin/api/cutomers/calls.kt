@@ -41,11 +41,9 @@ suspend fun getCustomers(
     println("Response Status: ${response.status.value}")
     return if (response.status.value in 200..299) {
         val result: List<CustomerResponse> = response.body()
-        println(result)
         result
     } else {
         val result: FailResponse = response.body()
-        println(result.detail)
         throw Exception(result.detail)
     }
 }

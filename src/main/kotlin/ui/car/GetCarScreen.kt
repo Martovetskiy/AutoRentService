@@ -84,7 +84,7 @@ private fun EditCarScreen(component: GetCarComponent) {
     val patternYear = Regex("""^\d{4}$""")
     val patternColorHex = Regex("""^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$""")
     val patternPricePerDay = Regex("""^\d+(\.\d{1,2})?$""")
-    val patternNumberPlate = Regex("""^[А-Я]{1}[0-9]{1,3}[А-Я]{1,2}[0-9]{2}$""")
+    val patternNumberPlate = Regex("""^[А-Я][0-9]{1,3}[А-Я]{1,2}[0-9]{2}$""")
     val patternStatus = Regex("""^(Available|Rented|UnderMaintenance)$""")
 
 
