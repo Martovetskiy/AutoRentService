@@ -2,11 +2,11 @@ package ui.rental
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,14 +17,16 @@ import androidx.compose.ui.unit.sp
 import api.rentals.RentalResponse
 import components.rental.GetRentalComponent
 import resources.icons.MoneyBankCheckPaymentChequeFinanceBusinessSvgrepoCom
+import ui.subtractDates
 import widgets.PopupNotification
 import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @Composable
 fun GetRentalScreen(component: GetRentalComponent) {
     Box(contentAlignment = Alignment.Center) {
         Column {
-            SearchWidget({ component.request2Get() }, component.id)
             if (component.rental.value != null) {
                 EditRentalScreen(component)
             } else {
@@ -37,45 +39,17 @@ fun GetRentalScreen(component: GetRentalComponent) {
     }
 }
 
-@Composable
-private fun SearchWidget(onSearch: () -> Unit, id: MutableState<Long?>) {
-    var searchQuery by remember { mutableStateOf("") }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Поле для ввода поиска
-        TextField(
-            value = searchQuery,
-            onValueChange = { searchQuery = it },
-            modifier = Modifier.weight(1f),
-            placeholder = { Text("Введите ID...") },
-            singleLine = true
-        )
-
-        Spacer(modifier = Modifier.width(8.dp)) // Пробел между полем и кнопкой
-
-        // Кнопка "Найти"
-        Button(onClick = {
-            id.value = searchQuery.toLongOrNull()
-            onSearch()
-        }) {
-            Text(text = "Найти", fontSize = 16.sp)
-        }
-    }
-}
 
 @Composable
 private fun EditRentalScreen(component: GetRentalComponent) {
     // Состояния для редактируемых данных проката
     val rentalId = component.rental.value!!.rentalId
-    val customerId = remember { mutableStateOf(component.rental.value!!.customerId.toString()) }
-    val carId = remember { mutableStateOf(component.rental.value!!.carId.toString()) }
-    val startDate = remember { mutableStateOf(component.rental.value!!.startDate.toString()) }
-    val endDate = remember { mutableStateOf(component.rental.value!!.endDate.toString()) }
+    val customer = remember { mutableStateOf(component.rental.value!!.customer)}
+    val car = remember { mutableStateOf(component.rental.value!!.car)}
+    val startDate = remember { mutableStateOf(component.rental.value!!.startDate.format(DateTimeFormatter.ofPattern("YYYY-MM-dd", Locale("ru")))) }
+    val endDate = remember { mutableStateOf(component.rental.value!!.endDate.format(DateTimeFormatter.ofPattern("YYYY-MM-dd", Locale("ru")))) }
+    var expandedMake by remember { mutableStateOf(false) }
+    var expandedModel by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier
@@ -113,44 +87,110 @@ private fun EditRentalScreen(component: GetRentalComponent) {
 
             if (component.isEdit.value) {
                 // Поля ввода для customerId и carId
-                TextField(
-                    value = customerId.value,
-                    onValueChange = { customerId.value = it },
-                    label = { Text("ID Клиента") },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-                )
+                Box(modifier = Modifier.padding(bottom = 8.dp)) { // Добавляем отступ для Divider
+                    Box (modifier = Modifier.fillMaxWidth()
+                        .background(color = Color.LightGray, shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                        .clickable { expandedModel = true }.border(1.dp, Color.LightGray, shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)),
+                        contentAlignment = Alignment.CenterStart) {
+                        Text(
+                            text = "${customer.value!!.firstName} ${customer.value!!.email}",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                        DropdownMenu(
+
+                            expanded = expandedModel,
+                            onDismissRequest = { expandedModel = false }
+                        ) {
+                            component.customers.value.map { Triple(it.customerId, it.firstName, it.email) }.sortedBy { it.first }.forEach { cust ->
+                                DropdownMenuItem(onClick = {
+                                    customer.value = component.customers.value.first { it.customerId == cust.first }
+                                    expandedModel = false
+                                }) {
+                                    Text(text = cust.second + ' ' + cust.third)
+                                }
+                            }
+                        }
+                    }
+
+                    Divider(
+                        color = Color.Green,
+                        thickness = 1.dp, // Толщина границы
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter) // Выровнять по центру снизу
+                    )
+                }
+
+                Box(modifier = Modifier.padding(bottom = 8.dp)) { // Добавляем отступ для Divider
+                    Box (modifier = Modifier.fillMaxWidth()
+                        .background(color = Color.LightGray, shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+                        .clickable { expandedMake = true }.border(1.dp, Color.LightGray, shape = RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp)),
+                        contentAlignment = Alignment.CenterStart) {
+                        Text(
+                            text = "#${car.value!!.carId} ${car.value!!.make} ${car.value!!.model}",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                        DropdownMenu(
+
+                            expanded = expandedMake,
+                            onDismissRequest = { expandedMake = false }
+                        ) {
+                            component.cars.value.map { Triple(it.carId, it.make, it.model) }.sortedBy { it.first }.forEach { carMake ->
+                                DropdownMenuItem(onClick = {
+                                    car.value = component.cars.value.first { it.carId == carMake.first }
+                                    expandedMake = false
+                                }) {
+                                    Text(text = '#' + carMake.first.toString() + ' ' + carMake.second + carMake.third)
+                                }
+                            }
+                        }
+                    }
+
+                    Divider(
+                        color = Color.Green,
+                        thickness = 1.dp, // Толщина границы
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter) // Выровнять по центру снизу
+                    )
+                }
+
 
                 TextField(
-                    value = carId.value,
-                    onValueChange = { carId.value = it },
-                    label = { Text("ID Автомобиля") },
-                    modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-                )
-
-                TextField(
+                    isError = !subtractDates(endDate.value,startDate.value,),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Green,
+                        unfocusedIndicatorColor = Color.Green
+                    ),
                     value = startDate.value,
                     onValueChange = { startDate.value = it },
-                    label = { Text("Дата начала") },
+                    label = { Text("Дата начала (ГГГГ-ММ-ДД)") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
                 TextField(
+                    isError = !subtractDates(endDate.value,startDate.value,),
+                    colors = TextFieldDefaults.textFieldColors(
+                        focusedIndicatorColor = Color.Green,
+                        unfocusedIndicatorColor = Color.Green
+                    ),
                     value = endDate.value,
                     onValueChange = { endDate.value = it },
-                    label = { Text("Дата окончания") },
+                    label = { Text("Дата окончания (ГГГГ-ММ-ДД)") },
                     modifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
                 )
 
                 // Кнопка для обновления данных о прокате
                 Button(
+                    enabled = subtractDates(endDate.value,startDate.value,),
                     onClick = {
                         // Обновление объекта RentalResponse и вызов функции обратного вызова
                         component.rentalBuf.value = RentalResponse(
                             rentalId = rentalId,
-                            customerId = customerId.value.toLong(), // Преобразование строки в Long
-                            carId = carId.value.toLong(), // Преобразование строки в Long
-                            startDate = OffsetDateTime.parse(startDate.value),
-                            endDate = OffsetDateTime.parse(endDate.value),
+                            customerId = customer.value!!.customerId, // Преобразование строки в Long
+                            carId = car.value!!.carId, // Преобразование строки в Long
+                            startDate = OffsetDateTime.parse(startDate.value + "T15:51:18+00:00"),
+                            endDate = OffsetDateTime.parse(endDate.value + "T15:51:18+00:00"),
                             totalPrice = 1.0,
                             createAt = component.rentalBuf.value!!.createAt
                         )
@@ -174,12 +214,12 @@ private fun EditRentalScreen(component: GetRentalComponent) {
 
             } else {
                 // Режим просмотра
-                Text(text = "ID Клиента: ${component.rental.value!!.customerId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "ID Автомобиля: ${component.rental.value!!.carId}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата начала: ${component.rental.value!!.startDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Дата окончания: ${component.rental.value!!.endDate}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Клиент: ${component.rental.value!!.customer!!.firstName} ${component.rental.value!!.customer!!.email}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Автомобиль: #${component.rental.value!!.carId} ${component.rental.value!!.car!!.make} ${component.rental.value!!.car!!.model} ${component.rental.value!!.car!!.year}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата начала: ${component.rental.value!!.startDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("ru")))}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Дата окончания: ${component.rental.value!!.endDate.format(DateTimeFormatter.ofPattern("dd MMMM yyyy", Locale("ru")))}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
                 Text(text = "Общая цена: ${component.rental.value!!.totalPrice}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
-                Text(text = "Создано: ${component.rental.value!!.createAt}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
+                Text(text = "Создано: ${component.rental.value!!.createAt.format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm:ss", Locale("ru")))}", fontSize = 16.sp, modifier = Modifier.padding(bottom = 4.dp))
             }
         }
     }

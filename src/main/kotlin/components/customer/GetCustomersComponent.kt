@@ -52,15 +52,6 @@ class GetCustomersComponent (
     fun request2Get(){
         GlobalScope.launch {
             _isLoad.value = false
-            getCustomers(
-                firstName = _firstName.value,
-                lastName = _lastName.value,
-                email = _email.value,
-                phoneNumber = _phone.value,
-                driverLicense = _license.value,
-                isBanned = _isBanned.value,
-                sortDirection = _sortDirection.value,
-                sortBy = _sortBy.value)
             try {
                 _data.value = getCustomers(
                     firstName = _firstName.value,

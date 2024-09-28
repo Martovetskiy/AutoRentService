@@ -47,23 +47,17 @@ fun GetPaymentsScreen(component: GetPaymentsComponent){
 
             Box(modifier = Modifier.fillMaxWidth()) {
                 if (showFilter) Filters(component)
-                if (!showFilter) Row (modifier = Modifier.align(Alignment.TopEnd).fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(text = "Просмотр", fontWeight = FontWeight.Bold, fontSize = 24.sp)
-                    Row(modifier = Modifier.clickable { showFilter = !showFilter } ,verticalAlignment = Alignment.CenterVertically){
-                        Icon(
-                            modifier = Modifier
-                                .width(25.dp)
-                                .height(25.dp),
-                            imageVector = FilterSvgrepoCom,
-                            contentDescription = null,
-                            tint = Color.Gray
-                        )
+                Row(modifier = Modifier.clickable { showFilter = !showFilter }.align(Alignment.TopEnd) ,verticalAlignment = Alignment.CenterVertically){
+                    Icon(
+                        modifier = Modifier
+                            .width(25.dp)
+                            .height(25.dp),
+                        imageVector = FilterSvgrepoCom,
+                        contentDescription = null,
+                        tint = Color.Gray
+                    )
 
-                        Text("Фильтры и сортировка", fontSize = 16.sp)
-                    }
+                    Text("Фильтры и сортировка", fontSize = 16.sp)
                 }
             }
 
@@ -210,7 +204,6 @@ private fun Filters(component: GetPaymentsComponent){
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                component.showFilter.value = false
                 component.request2Data()}
         ){
             Text("Применить")

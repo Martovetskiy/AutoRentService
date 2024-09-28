@@ -65,19 +65,25 @@ fun App(root: DecomposeNav) {
                 Column(modifier = Modifier.padding(16.dp).verticalScroll(scrollState)) {
                     // Группа Cars
                     Text(text = "Пользователи", fontWeight = FontWeight.Bold, color = Color.White)
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetCustomersScreen)
                     }) {
                         Text("Получить всех пользователей")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetCustomerScreen)
                     }) {
                         Text("Карточка пользователя (ID)")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.PostCustomerScreen)
                     }) {
@@ -88,19 +94,25 @@ fun App(root: DecomposeNav) {
 
                     // Группа Customers
                     Text(text = "Автомобили", fontWeight = FontWeight.Bold, color = Color.White)
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetCarsScreen)
                     }) {
                         Text("Получить все авто")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetCarScreen)
                     }) {
                         Text("Карточка авто (ID)")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.PostCarScreen)
                     }) {
@@ -111,19 +123,17 @@ fun App(root: DecomposeNav) {
 
                     // Группа Payments
                     Text(text = "Аренда", fontWeight = FontWeight.Bold, color = Color.White)
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetRentalsScreen)
                     }) {
                         Text("Получить все аренды")
                     }
-                    Button(onClick = {
-                        root._navigation.pop()
-                        root._navigation.pushNew(DecomposeNav.Configuration.GetRentalScreen)
-                    }) {
-                        Text("Карточка аренды (ID)")
-                    }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.PostRentalScreen)
                     }) {
@@ -134,19 +144,25 @@ fun App(root: DecomposeNav) {
 
                     // Группа Rentals
                     Text(text = "Платежи", fontWeight = FontWeight.Bold, color = Color.White)
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetPaymentsScreen)
                     }) {
                         Text("Получить все платежи")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.GetPaymentScreen)
                     }) {
                         Text("Карточка платежа (ID)")
                     }
-                    Button(onClick = {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {
                         root._navigation.pop()
                         root._navigation.pushNew(DecomposeNav.Configuration.PostPaymentScreen)
                     }) {
@@ -175,7 +191,7 @@ fun App(root: DecomposeNav) {
                         is DecomposeNav.Child.GetCarScreen -> GetCarScreen(instance.component)
                         is DecomposeNav.Child.PostCarScreen -> PostCarScreen(instance.component)
 
-                        is DecomposeNav.Child.GetRentalsScreen -> GetRentalsScreen(instance.component)
+                        is DecomposeNav.Child.GetRentalsScreen -> GetRentalsScreen(instance.component, root)
                         is DecomposeNav.Child.GetRentalScreen -> GetRentalScreen(instance.component)
                         is DecomposeNav.Child.PostRentalScreen -> PostRentalScreen(instance.component)
 
@@ -293,7 +309,7 @@ fun WindowScope.AppBar(
                 modifier = Modifier.size(36.dp),
                 imageVector = CarSvgrepoCom,
                 contentDescription = "AppIcon",
-                tint = Color.Yellow
+                tint = Color.White
 
             )
             Spacer(modifier=Modifier.width(8.dp))

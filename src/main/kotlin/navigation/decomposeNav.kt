@@ -1,5 +1,6 @@
 package navigation
 
+import api.rentals.RentalResponse
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.StackNavigation
 import com.arkivanov.decompose.router.stack.childStack
@@ -87,6 +88,7 @@ class DecomposeNav(
             is Configuration.GetRentalScreen -> Child.GetRentalScreen(
                 component = GetRentalComponent(
                     componentContext = context,
+                    rental = config.rental
                 )
             )
             is Configuration.PostPaymentScreen -> Child.PostPaymentScreen(
@@ -158,7 +160,9 @@ class DecomposeNav(
         data object GetRentalsScreen : Configuration()
 
         @Serializable
-        data object GetRentalScreen : Configuration()
+        data class GetRentalScreen(
+            val rental: RentalResponse?
+        ) : Configuration()
 
         @Serializable
         data object PostPaymentScreen : Configuration()
